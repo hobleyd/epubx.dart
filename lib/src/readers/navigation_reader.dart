@@ -4,6 +4,7 @@ import 'package:archive/archive.dart';
 import 'dart:convert' as convert;
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:epubx/src/schema/opf/epub_version.dart';
+import 'package:path/path.dart' as path;
 import 'package:xml/xml.dart' as xml;
 
 import '../schema/navigation/epub_metadata.dart';
@@ -246,10 +247,10 @@ class NavigationReader {
           break;
         case 'href':
           if (_tocFileEntryPath!.length < 2 ||
-              attributeValue.contains(_tocFileEntryPath!)) {
+              attributeValue.startsWith(_tocFileEntryPath!)) {
             result.Source = attributeValue;
           } else {
-            result.Source = _tocFileEntryPath! + attributeValue;
+            result.Source = path.normalize(_tocFileEntryPath! + attributeValue);
           }
 
           break;
