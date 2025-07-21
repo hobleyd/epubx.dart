@@ -37,14 +37,10 @@ abstract class EpubContentFileRef {
   }
 
   ArchiveFile getContentFileEntry() {
-    var contentFilePath = ZipPathUtils.combine(
-        epubBookRef.Schema!.ContentDirectoryPath, FileName);
-    var contentFileEntry = epubBookRef.EpubArchive()!
-        .files
-        .firstWhereOrNull((ArchiveFile x) => x.name == contentFilePath);
+    var contentFilePath = ZipPathUtils.combine(epubBookRef.Schema!.ContentDirectoryPath, FileName);
+    var contentFileEntry = epubBookRef.EpubArchive()!.files.firstWhereOrNull((ArchiveFile x) => x.name.contains(contentFilePath!));
     if (contentFileEntry == null) {
-      throw Exception(
-          'EPUB parsing error: file $contentFilePath not found in archive.');
+      throw Exception('EPUB parsing error: file $contentFilePath not found in archive.');
     }
     return contentFileEntry;
   }
