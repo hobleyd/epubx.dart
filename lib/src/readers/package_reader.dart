@@ -314,15 +314,12 @@ class PackageReader {
     return result;
   }
 
-  static Future<EpubPackage> readPackage(
-      Archive epubArchive, String rootFilePath) async {
-    var rootFileEntry = epubArchive.files.firstWhereOrNull(
-        (ArchiveFile testFile) => testFile.name == rootFilePath);
+  static Future<EpubPackage> readPackage(Archive epubArchive, String rootFilePath) async {
+    var rootFileEntry = epubArchive.files.firstWhereOrNull((ArchiveFile testFile) => testFile.name.contains(rootFilePath));
     if (rootFileEntry == null) {
       throw Exception('EPUB parsing error: root file not found in archive.');
     }
-    var containerDocument =
-        XmlDocument.parse(convert.utf8.decode(rootFileEntry.content));
+    var containerDocument = XmlDocument.parse(convert.utf8.decode(rootFileEntry.content));
     var opfNamespace = 'http://www.idpf.org/2007/opf';
     var packageNode = containerDocument
         .findElements('package', namespace: opfNamespace)
